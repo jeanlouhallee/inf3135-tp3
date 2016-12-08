@@ -39,8 +39,10 @@ Optional arguments:\n\
                            Mandatory for png format.\n\
                            If not specified, displays on stdout.\n\
 "
+// ------------ //
+// Enumerations //
+// ------------ //
 
-// Parsing errors
 enum Error {
     TP3_OK = 0,
     TP3_ERROR_TOO_MANY_ARGUMENTS = 1,
@@ -52,7 +54,10 @@ enum Error {
     TP3_ERROR_INVALID_COLOR = 7,
 };
 
-// Arguments
+// --------------- //
+// Data structures //
+// --------------- //
+
 struct Arguments {
     int numRows;                          // Number of rows
     int numCols;                          // Number of columns
@@ -63,8 +68,22 @@ struct Arguments {
     enum Error status;                    // The status of the parsing
 };
 
+/**
+ * Prints a help message when command 'bin/tp3 --help' is detected.
+ *
+ * @param argv  The program's argument
+ */
 void printUsage(char **argv);
 
+/**
+ * Scans the user's input by using 'getopt' and by putting options
+ * in a structure. Also provides information about error codes.
+ * 
+ * @param argc  number of arguments
+ * @param argv  Program's arguments (user's input)
+ *
+ * @return  a structure containing the user's choices.
+ */
 struct Arguments parseArguments(int argc, char **argv);
 
 #endif
