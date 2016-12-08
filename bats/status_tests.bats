@@ -60,8 +60,18 @@
   [ "$status" -eq 0 ]
 }
 
-@test "Yellow color not working" {
-  run bin/tp3 --walls-color yellow --output-format png --output-filename /tmp/maze.png
+@test "Navy color working" {
+  run bin/tp3 --walls-color navy --output-format png --output-filename /tmp/maze.png
+  [ "$status" -eq 0 ]
+}
+
+@test "Maroon color working" {
+  run bin/tp3 --walls-color maroon --output-format png --output-filename /tmp/maze.png
+  [ "$status" -eq 0 ]
+}
+
+@test "Unrecognized color" {
+  run bin/tp3 --walls-color kawoumbala --output-format png --output-filename /tmp/maze.png
   [ "$status" -eq 7 ]
 }
 
