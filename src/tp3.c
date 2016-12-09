@@ -19,7 +19,7 @@ int main(int argc, char **argv) {
         } else if (strcmp(arguments.outputFormat, "png") == 0) {
     	    Drawing_drawMaze(maze,
                              arguments.outputFilename,
-                             arguments.wallsColor);
+                             arguments.wallsColor, arguments.withSolution);
         }
     }
     return TP3_OK;

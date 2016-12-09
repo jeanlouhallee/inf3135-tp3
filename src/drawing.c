@@ -17,6 +17,7 @@
 #define ROOM_HEIGHT 30
 #define ROW_OFFSET 2
 #define COL_OFFSET 2
+#define SOLUTION_OFFSET 0.5
 
 // ----------------- //
 // Private functions //
@@ -81,13 +82,39 @@ void Drawing_drawRoom(cairo_t *cr,
     cairo_stroke(cr);
 }
 
+void Drawing_drawSolution(const struct Maze *maze, cairo_t *cr){
+    struct Array *array;
+    unsigned int i, j, iNext, jNext ,index;
+    const struct uiPair *pair1;
+    const struct uiPair *pair2;
+    array = Maze_path(maze, 0, 0, maze->numRows -1,maze->numCols-1);
+    
+    for(index = 0; index < array->length - 1; index++){
+        pair1 = Array_get(array,index);
+        pair2 = Array_get(array, index + 1);
+        i = pair1->first;
+        j = pair1->second;
+        iNext = pair2->first;
+        jNext = pair2->second;
+        cairo_set_line_width(cr, ROW_OFFSET);
+        cairo_move_to(cr,
+                  (j + SOLUTION_OFFSET) * (ROOM_WIDTH + COL_OFFSET),
+                  (i + SOLUTION_OFFSET) * (ROOM_WIDTH + ROW_OFFSET));
+        cairo_set_source_rgba(cr, 1.0, 0.0, 0.0, 1.0);
+        cairo_line_to(cr,
+                  (jNext + SOLUTION_OFFSET) * (ROOM_WIDTH + COL_OFFSET),
+                  (iNext + SOLUTION_OFFSET) * (ROOM_HEIGHT + ROW_OFFSET));
+        cairo_stroke(cr);
+    }
+}
+
 // ---------------- //
 // Public functions //
 // ---------------- //
 
 void Drawing_drawMaze(const struct Maze *maze,
                       const char *outputFilename,
-                      const char *wallsColor) {
+                      const char *wallsColor, bool withSolution) {
     cairo_surface_t *surface =
         cairo_image_surface_create(CAIRO_FORMAT_ARGB32,
         COL_OFFSET + maze->numCols * (ROOM_WIDTH + COL_OFFSET),
@@ -102,7 +129,10 @@ void Drawing_drawMaze(const struct Maze *maze,
                              &color);
         }
     }
+
+    if(withSolution) Drawing_drawSolution(maze, cr);
     cairo_destroy(cr);
     cairo_surface_write_to_png(surface, outputFilename);
     cairo_surface_destroy(surface);
+
 }
